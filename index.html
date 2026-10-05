@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102b3b">
+  <meta name="description" content="PAF-Grasp predicts contact-relevant SE(3) futures for real-time proactive dynamic grasping. Physics-aware forecasting, reachability-aware interception, and real-world results.">
+  <title>PAF-Grasp | Predict the contact. Make the grasp.</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="experiments.css">
+  <link rel="stylesheet" href="hammer.css">
+  <script src="app.js" defer></script>
+  <script src="hammer.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header">
+  <a class="brand" href="#top" aria-label="PAF-Grasp home"><span class="brand-mark">P<span>↗</span></span>PAF-Grasp</a>
+  <nav aria-label="Main navigation"><a href="#idea">The idea</a><a href="#method">Method</a><a href="#experiments">Experiments</a><a href="#results">Results</a></nav>
+  <a class="nav-paper" href="assets/paper.pdf" target="_blank" rel="noopener">Paper <span>↗</span></a>
+</header>
+<main id="main">
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero-mosaic" aria-hidden="true"><img src="assets/catch.jpg" alt=""><img src="assets/turntable.jpg" alt=""><img src="assets/conveyor.jpg" alt=""></div>
+  <svg class="hero-orbit" viewBox="0 0 1400 800" aria-hidden="true"><path d="M -100 660 Q 300 -100 980 520 T 1530 390"/><path d="M -60 680 Q 305 -70 990 542 T 1550 405"/><circle cx="985" cy="527" r="8"/><circle cx="985" cy="527" r="24"/></svg>
+  <div class="hero-content">
+    <p class="eyebrow"><span class="signal"></span> PHYSICAL FUTURES → FEASIBLE CONTACT</p>
+    <h1 id="hero-title">PAF<span>-Grasp</span><span class="title-dot">.</span></h1>
+    <h2>Predict the contact.<br>Make the grasp.</h2>
+    <p class="paper-title">Physics-Aware Object-Centric SE(3) Forecasting<br class="desktop-break"> for Real-Time Proactive Dynamic Grasping</p>
+    <p class="authors">Yirui Zhou<sup>1,*</sup> <span>Hongli Xu<sup>2,*</sup></span> <span>Ying Zheng<sup>1,†</sup></span> <span>Yi Wang<sup>1,†</sup></span> <span>Lap-Pui Chau<sup>1,†</sup></span></p>
+    <p class="affiliations"><sup>1</sup> The Hong Kong Polytechnic University <span>·</span> <sup>2</sup> Technical University of Munich</p>
+    <p class="author-note">* Equal contribution &nbsp; † Corresponding authors</p>
+    <div class="resources"><a class="button cream" href="assets/paper.pdf" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Read the paper</a><a class="button outline" href="#film"><span class="play-icon" aria-hidden="true">▶</span> Watch introduction</a><span class="code-status" aria-label="Code link not yet provided">&lt;/&gt; Code <small>Pending release</small></span></div>
+  </div>
+  <div class="hero-foot"><span>OBSERVE <i>→</i> FORECAST <i>→</i> INTERCEPT</span><a href="#overview">Explore the research <span>↓</span></a><span class="hero-tag">OBJECT-CENTRIC · PHYSICS-AWARE</span></div>
+</section>
+<section class="overview wrap" id="overview">
+  <p class="eyebrow dark">THE SHORT VERSION</p>
+  <div class="overview-copy"><h2>The future that<br><em>actually matters.</em></h2><p>A robot does not need to imagine an entire future scene to catch a moving object. It needs to know <strong>where the object will be, how it will be oriented, and whether contact is reachable.</strong> PAF-Grasp forecasts that compact physical future in SE(3), then selects a feasible moment to act.</p></div>
+  <div class="stats"><div><strong>15<span>ms</span></strong><p>SE(3) forecasting latency</p></div><div><strong>67.3<span>%</span></strong><p>Average real-world success</p></div><div><strong>+52.0<span>pp</span></strong><p>Gain over the reactive baseline</p></div></div>
+  <p class="small-note">Reported in the supplied manuscript. Real-world average across catching, conveyor, and turntable tasks.</p>
+</section>
+<section class="film-section" id="film"><div class="wrap"><div class="section-top"><p class="eyebrow">SEE IT IN MOTION</p><span class="mono">PAF-Grasp / Introduction</span></div><figure class="video-frame"><video id="intro" controls playsinline preload="metadata" poster="assets/poster.jpg" aria-label="PAF-Grasp introduction video"><source src="assets/intro.mp4" type="video/mp4">Your browser does not support this video. <a href="assets/intro.mp4">Download the introduction.</a></video><figcaption><span class="signal"></span> From a short pose history to a reachable future contact.</figcaption></figure></div></section>
+<section class="wrap section" id="idea">
+  <div class="section-heading"><p class="eyebrow dark">01 / THE IDEA</p><h2>Don't chase the present.<br><em>Reach the future.</em></h2><p>Motion and system delay make the current pose a moving target. Predicting the contact-time state turns reactive tracking into proactive interception.</p></div>
+<div class="hammer-demo">
+  <div class="hammer-demo-header"><span class="mono">FORECAST THE CONTACT</span><span class="demo-badge">Concept animation</span></div>
+  <svg id="hammer-scene" viewBox="0 0 960 470" role="img" aria-labelledby="hammer-scene-title hammer-scene-description">
+    <title id="hammer-scene-title">A moving hammer meets a target mounted on the robot arm</title>
+    <desc id="hammer-scene-description">A black articulated robot arm moves its circular end-effector target into a predicted interception point. A wooden hammer follows a curved trajectory and strikes the target center after the arm arrives. Use the playback or progress controls to inspect the contact.</desc>
+    <defs>
+      <pattern id="hammer-grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#d9e1de" stroke-width=".6"/></pattern>
+      <linearGradient id="arm-metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#42525b"/><stop offset=".5" stop-color="#1d303b"/><stop offset="1" stop-color="#0b202d"/></linearGradient>
+      <linearGradient id="hammer-wood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e0c598"/><stop offset=".45" stop-color="#d1a56c"/><stop offset="1" stop-color="#ac7c4b"/></linearGradient>
+      <filter id="hammer-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#102b3b" flood-opacity=".13"/></filter>
+      <g id="mallet-shape"><rect x="-6" y="9" width="12" height="108" rx="5" fill="#b98755"/><path d="M-2 26V105" stroke="#ead0a1" stroke-width="2" stroke-linecap="round" opacity=".6"/><rect x="-38" y="-21" width="76" height="42" rx="9" fill="url(#hammer-wood)" stroke="#ab8053" stroke-width="1.2"/><path d="M-22 -15C-13 -5 -31 8 -19 16M-11 -17C1 -8 -12 4 -4 18M8 -17C-1 -3 19 3 10 17" fill="none" stroke="#b38757" stroke-width="1" opacity=".48"/><path d="M25 -18V18" stroke="#f1dab5" stroke-width="2" opacity=".75"/><path d="M31 -13V13" stroke="#a77a4e" stroke-width="1.4" opacity=".4"/></g>
+    </defs>
+    <rect width="960" height="470" fill="#f0f3ef"/><rect x="25" y="25" width="910" height="408" rx="5" fill="url(#hammer-grid)"/>
+    <ellipse cx="793" cy="430" rx="108" ry="12" fill="#183541" opacity=".07"/>
+    <path d="M72 432H888" stroke="#c2ceca" stroke-width="1"/>
+    <path id="hammer-forecast-path" d="M115 285Q345 20 648 210" fill="none" stroke="#7d9e9e" stroke-width="2" stroke-dasharray="5 9"/>
+    <g id="hammer-ghosts" aria-hidden="true"></g>
+    <path id="hammer-observed-path" d="M115 285" fill="none" stroke="#326e79" stroke-width="3" stroke-linecap="round"/>
+    <g id="predicted-contact-marker" transform="translate(648 210)" opacity=".48" aria-hidden="true"><circle r="36" fill="#dce9e3" fill-opacity=".3" stroke="#648b87" stroke-dasharray="4 5"/><circle r="10" fill="none" stroke="#648b87" stroke-dasharray="3 4"/><path d="M-43 0H43M0 -43V43" stroke="#648b87" stroke-width=".8"/></g>
+    <path id="target-interception-path" fill="none" stroke="#326e79" stroke-width="1.6" stroke-dasharray="4 7" opacity=".55"/>
+    <g id="piper-arm" filter="url(#hammer-shadow)">
+      <path d="M743 422H863L872 434H734Z" fill="#17303d"/>
+      <rect x="768" y="393" width="70" height="29" rx="5" fill="url(#arm-metal)"/>
+      <rect x="777" y="351" width="53" height="46" rx="9" fill="url(#arm-metal)"/>
+      <g id="arm-shoulder-link">
+        <path d="M803 360L752 289" stroke="#122936" stroke-width="37" stroke-linecap="round"/>
+        <path d="M803 360L752 289" stroke="#52636b" stroke-width="19" stroke-linecap="round"/>
+        <path d="M800 358L750 289" stroke="#203744" stroke-width="15" stroke-linecap="round"/>
+        <path d="M822 366Q780 324 763 289" fill="none" stroke="#091f2a" stroke-width="5" stroke-linecap="round"/>
+        <path d="M822 366Q780 324 763 289" fill="none" stroke="#627079" stroke-width="1.1" stroke-linecap="round"/>
+        <g id="arm-elbow-link">
+          <path d="M752 289L804 203" stroke="#162c38" stroke-width="34" stroke-linecap="round"/>
+          <path d="M752 289L804 203" stroke="#425760" stroke-width="17" stroke-linecap="round"/>
+          <path d="M754 290L806 205" stroke="#213845" stroke-width="13" stroke-linecap="round"/>
+          <path d="M740 280Q748 233 793 192" fill="none" stroke="#091f2a" stroke-width="5" stroke-linecap="round"/>
+          <path d="M740 280Q748 233 793 192" fill="none" stroke="#627079" stroke-width="1.1" stroke-linecap="round"/>
+          <g id="arm-wrist-link">
+            <path d="M804 203L714 179" stroke="#142b38" stroke-width="29" stroke-linecap="round"/>
+            <path d="M804 203L714 179" stroke="#4b5d65" stroke-width="13" stroke-linecap="round"/>
+            <path d="M805 204L715 180" stroke="#243b48" stroke-width="10" stroke-linecap="round"/>
+            <path d="M711 181L690 210" stroke="#18303d" stroke-width="23" stroke-linecap="round"/>
+            <path d="M811 191Q741 142 708 167" fill="none" stroke="#091f2a" stroke-width="5" stroke-linecap="round"/>
+            <path d="M811 191Q741 142 708 167" fill="none" stroke="#627079" stroke-width="1.1" stroke-linecap="round"/>
+            <circle cx="714" cy="179" r="16" fill="#233d49" stroke="#809093" stroke-width="1.2"/><circle cx="714" cy="179" r="5" fill="#9daba9"/>
+            <rect x="674" y="196" width="28" height="28" rx="5" fill="#16303d"/><path d="M675 198H657V207M675 222H657V214" fill="none" stroke="#576b72" stroke-width="5" stroke-linejoin="round"/>
+            <g id="arm-target" transform="translate(648 210)"><circle r="36" fill="#17323f"/><circle r="32" fill="#faf8f2" stroke="#a4b8b6" stroke-width="1"/><circle r="24" fill="none" stroke="#b76e59" stroke-width="5"/><circle r="13" fill="none" stroke="#b76e59" stroke-width="3"/><circle r="5" fill="#b76e59"/><path d="M-42 0H-34M34 0H42M0 -42V-34M0 34V42" stroke="#648989" stroke-width="1"/></g>
+          </g>
+          <circle cx="804" cy="203" r="20" fill="#233d49" stroke="#809093" stroke-width="1.2"/><circle cx="804" cy="203" r="6" fill="#9daba9"/>
+          <path d="M795 204L801 194" stroke="#d6b77e" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <circle cx="752" cy="289" r="22" fill="#233d49" stroke="#809093" stroke-width="1.2"/><circle cx="752" cy="289" r="7" fill="#9daba9"/>
+        <path d="M738 286L746 273" stroke="#d6b77e" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <circle cx="803" cy="358" r="22" fill="#233d49" stroke="#809093" stroke-width="1.2"/><circle cx="803" cy="358" r="8" fill="#9daba9"/>
+    </g>
+    <g id="hammer-impact" transform="translate(648 210)" opacity="0" aria-hidden="true"><circle id="impact-ring" r="42" fill="none" stroke="#c7a261" stroke-width="2.5"/><circle id="impact-ring-outer" r="56" fill="none" stroke="#c7a261" stroke-width="1.2"/><path d="M-51 -29L-63 -36M-27 -49L-33 -62M24 -47L30 -60M48 29L61 37M-26 48L-33 61" stroke="#c7a261" stroke-width="2" stroke-linecap="round"/></g>
+    <g id="moving-hammer" filter="url(#hammer-shadow)"><use href="#mallet-shape"/></g>
+    <g class="hammer-annotation"><path d="M124 335V365H195" fill="none" stroke="#9bb1ad" stroke-width="1"/><text x="80" y="383">MOVING HAMMER</text><path d="M648 164V113H733" fill="none" stroke="#9bb1ad" stroke-width="1"/><text x="671" y="100">PREDICTED CONTACT</text><text x="880" y="462" text-anchor="end">ROBOT-MOUNTED TARGET</text></g>
+    <g id="contact-state-pill" transform="translate(66 42)"><rect width="210" height="33" rx="16.5" fill="#fbfaf7" stroke="#d3ded9"/><circle id="contact-state-dot" cx="17" cy="16.5" r="3.5" fill="#326e79"/><text id="contact-state-label" x="30" y="21">Forecasting the contact</text></g>
+  </svg>
+  <div class="hammer-controls"><div class="hammer-playback"><button id="toggle-hammer" type="button" aria-label="Play hammer contact animation"><span id="hammer-play-icon" aria-hidden="true">▶</span><span id="hammer-play-label">Play</span></button><button id="replay-hammer" type="button" aria-label="Replay hammer contact animation">↻ Replay</button></div><div class="hammer-progress"><label for="hammer-progress">Contact progress <output id="hammer-progress-output">0%</output></label><input id="hammer-progress" type="range" min="0" max="100" value="0" step="1"><div class="hammer-stages"><span id="stage-observe">Observe</span><span id="stage-forecast">Forecast</span><span id="stage-contact">Contact</span></div></div></div>
+  <p class="demo-note">Concept illustration of forecast-guided contact. Robot geometry and motion are schematic.</p>
+</div>
+<div class="idea-explanations"><article><span class="step-label">CURRENT STATE</span><h3>A pose can become stale.</h3><p>By the time a command is executed, the hammer has moved. Reacting to its current pose leaves the robot chasing a contact that has already passed.</p></article><article><span class="step-label">CONTACT-TIME STATE</span><h3>Meet the hammer at the center.</h3><p>Forecast the hammer's future position and orientation. Move the robot-mounted target to a reachable future contact state before the hammer arrives. The target meets the striking point at the right moment.</p></article></div>
+</section>
+<section class="method-section" id="method"><div class="wrap section"><div class="section-heading"><p class="eyebrow dark">02 / THE METHOD</p><h2>Forecast first.<br><em>Then select.</em></h2><p>Object-centric prediction meets robot-specific feasibility. A compact physical state connects perception, dynamics, and action.</p></div><div class="method-steps"><article><span class="number">01</span><h3>Observe &amp; recover</h3><p>Recover metric geometry and an approximate inertia prior from an anchor RGB-D image. Track the object's recent SE(3) pose history online.</p><span class="pill">RGB-D → rigid-body state</span></article><article><span class="number">02</span><h3>Forecast in SE(3)</h3><p>Encode motion history, estimate initial velocities, and integrate a Newton–Euler-structured neural ODE to predict future position and rotation.</p><span class="pill">Continuous-time dynamics</span></article><article><span class="number">03</span><h3>Select &amp; intercept</h3><p>Propagate the contact frame along the forecast. Choose a future target that satisfies kinematic, workspace, and timing constraints.</p><span class="pill">Reachable contact state</span></article></div><figure class="method-figure"><button class="figure-zoom" id="open-method" aria-label="Enlarge PAF-Grasp method figure"><img src="assets/method.png" alt="PAF-Grasp pipeline: RGB-D observation and tracking, neural SE(3) forecaster with inertia prior, interception selector, and training on primitive objects in Genesis."><span>View full figure ↗</span></button><figcaption>Trained on randomized primitive-object trajectories in Genesis. Transferred to real objects within each motion family without object-specific retraining.</figcaption></figure><div class="method-note"><span class="mono">15 ms forecast</span><span class="mono">10 Hz online replanning</span><span class="mono">One checkpoint per motion family</span></div></div></section>
+<section class="wrap section experiments-section" id="experiments">
+  <div class="experiment-intro">
+    <div class="section-heading"><p class="eyebrow dark">03 / IN THE REAL WORLD</p><h2>Different motions.<br><em>One decision principle.</em></h2><p>Catch in flight. Intercept in motion. Grasp at the right phase.<br>See contact-time forecasting at work.</p></div>
+    <div class="experiment-controls"><span class="mono"><i class="legend-dot future"></i> REAL-WORLD DEMOS</span><button id="toggle-demos" type="button" aria-label="Play all experiment videos"><span class="demo-play-symbol" aria-hidden="true">▶</span><span id="demo-toggle-label">Play demos</span></button></div>
+  </div>
+  <div class="experiment-grid">
+    <article class="experiment-card">
+      <div class="experiment-meta"><span>01 / CATCHING</span><span>PARABOLIC</span></div>
+      <div class="experiment-media"><video class="experiment-video" data-demo="catch" muted loop playsinline preload="metadata" poster="assets/catch-poster.jpg" aria-label="Real-world parabolic ball catching demonstration"><source src="assets/catch-demo.mp4" type="video/mp4"></video><button class="expand-demo" data-expand="catch" type="button" aria-label="Enlarge catching video"><span aria-hidden="true">↗</span></button><span class="footage-label">REAL WORLD</span></div>
+      <div class="experiment-card-copy"><h3>Meet it in flight.</h3><p>Forecast a tossed ball's contact point before the opportunity passes.</p><div class="experiment-score"><strong>64<span>%</span></strong><div><span>grasping success</span><small>vs. 0% · π₀.₅ + RTC</small></div></div></div>
+    </article>
+    <article class="experiment-card">
+      <div class="experiment-meta"><span>02 / CONVEYOR</span><span>LINEAR</span></div>
+      <div class="experiment-media"><video class="experiment-video" data-demo="conveyor" muted loop playsinline preload="metadata" poster="assets/conveyor-poster.jpg" aria-label="Real-world conveyor interception demonstration"><source src="assets/conveyor-demo.mp4" type="video/mp4"></video><button class="expand-demo" data-expand="conveyor" type="button" aria-label="Enlarge conveyor video"><span aria-hidden="true">↗</span></button><span class="footage-label">REAL WORLD</span></div>
+      <div class="experiment-card-copy"><h3>Intercept the motion.</h3><p>Meet a sliding object at a reachable future position, rather than trailing behind.</p><div class="experiment-score"><strong>78<span>%</span></strong><div><span>grasping success</span><small>vs. 34% · π₀.₅ + RTC</small></div></div></div>
+    </article>
+    <article class="experiment-card">
+      <div class="experiment-meta"><span>03 / TURNTABLE</span><span>ROTATIONAL</span></div>
+      <div class="experiment-media"><video class="experiment-video" data-demo="turntable" muted loop playsinline preload="metadata" poster="assets/turntable-poster.jpg" aria-label="Real-world rotating cup handle grasping demonstration"><source src="assets/turntable-demo.mp4" type="video/mp4"></video><button class="expand-demo" data-expand="turntable" type="button" aria-label="Enlarge turntable video"><span aria-hidden="true">↗</span></button><span class="footage-label">REAL WORLD</span></div>
+      <div class="experiment-card-copy"><h3>Catch the right phase.</h3><p>Predict position and orientation to meet a rotating cup handle at contact time.</p><div class="experiment-score"><strong>60<span>%</span></strong><div><span>grasping success</span><small>vs. 12% · π₀.₅ + RTC</small></div></div></div>
+    </article>
+  </div>
+  <p class="experiment-provenance">Representative footage from the project introduction. Success rates come from 50 separate evaluation trials per method, per task.</p>
+  <div class="experiment-setup"><div class="setup-visual"><img src="assets/real-world-setup.png" alt="Real-world experimental apparatus and objects: robot gripper, conveyor, turntables, cup, block, hammer, and catching basket" loading="lazy"></div><div class="setup-copy"><p class="eyebrow">THE PHYSICAL SETUP</p><h3>From predicted state<br>to physical contact.</h3><p>One experimental platform, three motion families. RGB-D sensing keeps the object's SE(3) history up to date for closed-loop interception.</p><div class="setup-specs"><span>AgileX Piper arm</span><span>RealSense D435i</span><span>SE(3) pose tracking</span></div></div></div>
+</section>
+<section class="results-section" id="results"><div class="wrap section"><div class="results-heading"><div class="section-heading"><p class="eyebrow dark">04 / THE EVIDENCE</p><h2>A physical future.<br><em>A measurable difference.</em></h2></div><div class="segment" role="group" aria-label="Results setting"><button class="selected" aria-pressed="true" data-setting="real">Real world</button><button aria-pressed="false" data-setting="sim">Simulation</button></div></div><div class="results-layout"><div class="chart-block"><div class="chart-header"><h3>Grasping success rate</h3><span>Higher is better ↑</span></div><div class="chart-legend"><span><i class="legend-dot future"></i>PAF-Grasp</span><span><i class="legend-dot neutral"></i><span id="baseline-label">π₀.₅ + RTC</span></span></div><div id="results-chart" aria-live="polite"></div><p class="small-note" id="trial-note">50 evaluation trials per method, per task. Same fixed RTC hyperparameters across tasks.</p></div><aside class="result-summary"><span class="eyebrow dark">AVERAGE SUCCESS</span><div class="result-change"><span id="average-baseline">15.3%</span><span class="change-arrow">→</span><strong id="average-ours">67.3%</strong></div><p id="result-summary-copy">Explicit future contact-state prediction improves average real-world success by 52.0 percentage points.</p><a href="assets/paper.pdf#page=6" target="_blank" rel="noopener">Explore the evaluation <span>↗</span></a></aside></div><details class="full-table"><summary>View task success rates <span>+</span></summary><div class="table-scroll"><table><caption>Success rates (%) reported in the manuscript. Simulation: Table 1. Real world: Figure 3.</caption><thead><tr><th scope="col">Setting / Method</th><th scope="col">Catch</th><th scope="col">Conveyor</th><th scope="col">Turntable</th><th scope="col">Ramp</th><th scope="col">Average</th></tr></thead><tbody><tr><th scope="row">Real world · π₀.₅ + RTC</th><td>0</td><td>34</td><td>12</td><td>—</td><td>15.3</td></tr><tr class="ours-row"><th scope="row">Real world · PAF-Grasp</th><td>64</td><td>78</td><td>60</td><td>—</td><td>67.3</td></tr><tr><th scope="row">Simulation · π₀</th><td>6</td><td>50</td><td>16</td><td>26</td><td>24.5</td></tr><tr class="ours-row"><th scope="row">Simulation · PAF-Grasp</th><td>56</td><td>78</td><td>62</td><td>52</td><td>62.0</td></tr></tbody></table></div></details></div></section>
+<section class="wrap section representation"><div class="representation-copy"><p class="eyebrow dark">05 / WHAT SHOULD WE PREDICT?</p><h2>Less scene.<br><em>More physics.</em></h2><p>For interception, a visually plausible future is not enough. The useful prediction is a metrically accurate contact state, available in time to act.</p><p class="small-note">This evaluates representation suitability, not an input-matched comparison: video models use single-image prompting; PAF-Grasp uses tracked SE(3) histories and a recovered mesh. See Section 4.2.</p></div><div class="representation-table"><table><caption>Contact-relevant prediction · manuscript Table 2</caption><thead><tr><th scope="col">Method</th><th scope="col">Mask mIoU ↑</th><th scope="col">Time (s) ↓</th></tr></thead><tbody><tr><th scope="row">CogVideoX</th><td>0.0036</td><td>180</td></tr><tr><th scope="row">Wan 2.2</th><td>0.0225</td><td>41</td></tr><tr><th scope="row">Veo 3.1</th><td>0.0334</td><td>71</td></tr><tr><th scope="row">Kling 3.0</th><td>0.0466</td><td>30</td></tr><tr class="ours-row"><th scope="row">PAF-Grasp</th><td>0.2762</td><td>0.015</td></tr></tbody></table></div></section>
+<section class="reading-section"><div class="wrap section"><div class="reading-grid"><div><p class="eyebrow dark">THE PAPER</p><h2>Compact state.<br><em>Proactive action.</em></h2><a class="button navy" href="assets/paper.pdf" target="_blank" rel="noopener">Read the manuscript <span>↗</span></a></div><div class="reading-accordions"><details><summary>Abstract <span>+</span></summary><p>Proactive dynamic grasping requires robots to predict the future state at which physical contact will occur, rather than reacting to the currently observed object pose. But what future must the robot predict, and at what level of abstraction? We argue that contact-relevant rigid-body state in SE(3) is a compact task-sufficient abstraction for this problem: it directly determines where and when the robot should establish contact, without requiring visually complete future scenes.</p><p>This insight leads to a lightweight object-centric forecast-then-select framework that predicts future rigid-body trajectories from short pose histories and uses a reachability-aware interception selector to choose feasible contact states under kinematic and timing constraints. Trained with randomized physics simulation over primitive shapes, the forecaster transfers to real objects once their metric geometry and SE(3) state histories are recovered.</p><p>Experiments across simulation and real-world dynamic grasping tasks show that our framework improves the average success rate from 24.5% to 62.0% in simulation, and from 15.3% to 67.3% in real-world catching, conveyor, and turntable interception. The SE(3) forecaster runs in 15 ms, orders of magnitude faster than dense visual future prediction, enabling real-time contact decision making. Our results suggest that effective proactive grasping does not require imagining the entire future scene. Instead, predicting the compact physical future that determines contact provides an effective and practical abstraction for real-time dynamic grasping.</p></details><details><summary>Scope &amp; limitations <span>+</span></summary><p>The framework focuses on short-horizon, continuous motion of a single rigid body. Deformable objects, coupled interactions, collisions, and contact transitions require richer dynamics representations. Performance also depends on velocity estimation, RGB-D pose tracking, approximate inertia, and the robot's reachable workspace.</p><p>Classical predictors remain competitive when motion structure is known: they match the learned forecaster on conveyor success and perform better on ramp success in the matched noisy-input study. PAF-Grasp uses a common physics-structured architecture, with one checkpoint trained for each motion family.</p></details><details id="citation"><summary>Citation <span>+</span></summary><div class="citation-head"><span>Manuscript · 2026</span><button id="copy-citation">Copy BibTeX</button></div><pre id="bibtex">@misc{zhou2026pafgrasp,
+  title={Physics-Aware Object-Centric SE(3) Forecasting
+         for Real-Time Proactive Dynamic Grasping},
+  author={Zhou, Yirui and Xu, Hongli and Zheng, Ying
+          and Wang, Yi and Chau, Lap-Pui},
+  year={2026},
+  note={Manuscript}
+}</pre><span id="copy-status" class="small-note" role="status"></span></details></div></div></div></section>
+</main>
+<footer class="wrap"><a class="brand" href="#top"><span class="brand-mark">P<span>↗</span></span>PAF-Grasp</a><p>Predict the contact. Make the grasp.<br><small>Visual inspiration: <a href="https://dumdumgura.github.io/proxy2world/" target="_blank" rel="noopener">Proxy2World</a></small></p><a href="#top" class="back-top">Back to top ↑</a></footer>
+<dialog id="method-dialog" aria-label="PAF-Grasp method figure"><button id="close-method" aria-label="Close figure">Close ×</button><div class="method-dialog-actions"><span>PAF-Grasp / Architecture</span></div><img src="assets/method.png" alt="Full PAF-Grasp architecture figure rendered from the original main.pdf"></dialog>
+<dialog id="experiment-dialog" aria-labelledby="experiment-dialog-title"><button id="close-experiment" type="button" aria-label="Close experiment video">Close ×</button><div class="experiment-dialog-head"><h3 id="experiment-dialog-title">Real-world demonstration</h3><span class="mono">PAF-Grasp / Experimental footage</span></div><video id="expanded-demo" controls muted playsinline loop preload="none"></video><p>Representative experimental footage from the project introduction.</p></dialog>
+</body>
+</html>
